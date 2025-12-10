@@ -177,3 +177,6 @@ pyrightconfig.json
 fastapi/
 
 # End of https://www.toptal.com/developers/gitignore/api/python
+
+# Custom additions -- files that are too big to push to Git
+model/*.pkl

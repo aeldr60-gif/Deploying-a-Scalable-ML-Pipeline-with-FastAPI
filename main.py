@@ -26,24 +26,28 @@ class Data(BaseModel):
     hours_per_week: int = Field(..., example=40, alias="hours-per-week")
     native_country: str = Field(..., example="United-States", alias="native-country")
 
-path = None # TODO: enter the path for the saved encoder 
+
+# Resolve project/model paths
+_project_path = os.path.dirname(os.path.abspath(__file__))
+_model_dir = os.path.join(_project_path, "model")
+
+path = os.path.join(_model_dir, "encoder.pkl") # enter the path for the saved encoder 
 encoder = load_model(path)
 
-path = None # TODO: enter the path for the saved model 
+path = os.path.join(_model_dir, "model.pkl") # enter the path for the saved model 
 model = load_model(path)
 
-# TODO: create a RESTful API using FastAPI
-app = None # your code here
+# create a RESTful API using FastAPI
+app = FastAPI()
 
-# TODO: create a GET on the root giving a welcome message
+# create a GET on the root giving a welcome message
 @app.get("/")
 async def get_root():
     """ Say hello!"""
-    # your code here
-    pass
+    return {"message": "Welcome to the census income prediction API."}
 
 
-# TODO: create a POST on a different path that does model inference
+#TODO: create a POST on a different path that does model inference
 @app.post("/data/")
 async def post_inference(data: Data):
     # DO NOT MODIFY: turn the Pydantic model into a dict.
@@ -69,6 +73,12 @@ async def post_inference(data: Data):
         # use data as data input
         # use training = False
         # do not need to pass lb as input
+        data,
+        categorical_features=cat_features,
+        label=None,
+        training=False,
+        encoder=encoder,
+        lb=None,
     )
-    _inference = None # your code here to predict the result using data_processed
+    _inference = inference(model, data_processed) # your code here to predict the result using data_processed
     return {"result": apply_label(_inference)}
