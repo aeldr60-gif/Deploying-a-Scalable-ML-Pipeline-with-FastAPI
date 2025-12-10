@@ -1,3 +1,5 @@
+import os
+
 import pytest
 import pandas as pd
 import pytest
@@ -37,7 +39,7 @@ def train_test_subset():
     # Get Subset
     data_sample = data.sample(n=1000, random_state=0)
 
-        train, test = train_test_split(
+    train, test = train_test_split(
         data_sample,
         test_size=0.2,
         random_state=42,
@@ -66,7 +68,7 @@ def train_test_subset():
 
 
 # implement the first test. Change the function name and input as needed
-def return_random_forest():
+def test_return_random_forest():
     """
     # Checks that the train_model returns a RandomForestclassifier instance
     """
@@ -81,7 +83,7 @@ def return_random_forest():
 
 
 # implement the second test. Change the function name and input as needed
-def inference_output_shape():
+def test_inference_output_shape():
     """
     # Test to see if Inference returns one prediction per input row
     """
@@ -98,7 +100,7 @@ def inference_output_shape():
 
 
 # implement the third test. Change the function name and input as needed
-def models_in_valid_range():
+def test_models_in_valid_range():
     """
     # compute_model_metrics should return precision, recall, and fbeta
     values between 0 and 1.
