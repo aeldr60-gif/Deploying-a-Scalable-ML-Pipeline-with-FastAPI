@@ -7,6 +7,7 @@ from pydantic import BaseModel, Field
 from ml.data import apply_label, process_data
 from ml.model import inference, load_model
 
+
 # DO NOT MODIFY
 class Data(BaseModel):
     age: int = Field(..., example=37)
@@ -15,7 +16,9 @@ class Data(BaseModel):
     education: str = Field(..., example="HS-grad")
     education_num: int = Field(..., example=10, alias="education-num")
     marital_status: str = Field(
-        ..., example="Married-civ-spouse", alias="marital-status"
+        ...,
+        example="Married-civ-spouse",
+        alias="marital-status",
     )
     occupation: str = Field(..., example="Prof-specialty")
     relationship: str = Field(..., example="Husband")
@@ -24,21 +27,27 @@ class Data(BaseModel):
     capital_gain: int = Field(..., example=0, alias="capital-gain")
     capital_loss: int = Field(..., example=0, alias="capital-loss")
     hours_per_week: int = Field(..., example=40, alias="hours-per-week")
-    native_country: str = Field(..., example="United-States", alias="native-country")
+    native_country: str = Field(
+        ...,
+        example="United-States",
+        alias="native-country",
+    )
 
 
 # Resolve project/model paths
 _project_path = os.path.dirname(os.path.abspath(__file__))
 _model_dir = os.path.join(_project_path, "model")
 
-path = os.path.join(_model_dir, "encoder.pkl") # enter the path for the saved encoder 
+path = os.path.join(_model_dir, "encoder.pkl")  # enter the path for the saved encoder
 encoder = load_model(path)
 
-path = os.path.join(_model_dir, "model.pkl") # enter the path for the saved model 
+path = os.path.join(_model_dir, "model.pkl")  # enter the path for the saved model
 model = load_model(path)
+
 
 # create a RESTful API using FastAPI
 app = FastAPI()
+
 
 # create a GET on the root giving a welcome message
 @app.get("/")
@@ -47,7 +56,7 @@ async def get_root():
     return {"message": "Welcome to the census income prediction API."}
 
 
-#TODO: create a POST on a different path that does model inference
+# create a POST on a different path that does model inference
 @app.post("/data/")
 async def post_inference(data: Data):
     # DO NOT MODIFY: turn the Pydantic model into a dict.
@@ -69,10 +78,6 @@ async def post_inference(data: Data):
         "native-country",
     ]
     data_processed, _, _, _ = process_data(
-        # your code here
-        # use data as data input
-        # use training = False
-        # do not need to pass lb as input
         data,
         categorical_features=cat_features,
         label=None,
@@ -80,5 +85,5 @@ async def post_inference(data: Data):
         encoder=encoder,
         lb=None,
     )
-    _inference = inference(model, data_processed) # your code here to predict the result using data_processed
+    _inference = inference(model, data_processed)
     return {"result": apply_label(_inference)}

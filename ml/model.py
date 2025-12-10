@@ -4,6 +4,7 @@ from ml.data import process_data
 
 from sklearn.ensemble import RandomForestClassifier
 
+
 # Optional: implement hyperparameter tuning.
 def train_model(X_train, y_train):
     """
@@ -69,8 +70,6 @@ def inference(model, X):
     return preds
 
 
-
-
 def save_model(model, path):
     """ Serializes model to a file.
 
@@ -85,7 +84,6 @@ def save_model(model, path):
         pickle.dump(model, f)
 
 
-
 def load_model(path):
     """ Loads pickle file from `path` and returns it."""
     with open(path, "rb") as f:
@@ -94,7 +92,7 @@ def load_model(path):
 
 
 def performance_on_categorical_slice(
-    data, column_name, slice_value, categorical_features, label, encoder, lb, model
+    data, column_name, slicevalue, categorical_features, label, encoder, lb, model
 ):
     """ Computes the model metrics on a slice of the data specified by a column name and
 
@@ -108,7 +106,7 @@ def performance_on_categorical_slice(
         Dataframe containing the features and label. Columns in `categorical_features`
     column_name : str
         Column containing the sliced feature.
-    slice_value : str, int, float
+    slicevalue : str, int, float
         Value of the slice feature.
     categorical_features: list
         List containing the names of the categorical features (default=[])
@@ -129,9 +127,13 @@ def performance_on_categorical_slice(
     fbeta : float
 
     """
+
+    # define data_slice (syntax error in original code)
+    data_slice = data[data[column_name] == slicevalue]
+
     X_slice, y_slice, _, _ = process_data(
         # your code here
-        # for input data, use data in column given as "column_name", with the slice_value 
+        # for input data, use data in column given as "column_name", with the slice_value
         # use training = False
         data_slice,
         categorical_features=categorical_features,

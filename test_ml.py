@@ -1,8 +1,6 @@
 import os
 
-import pytest
 import pandas as pd
-import pytest
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 
@@ -66,7 +64,6 @@ def train_test_subset():
     return X_train, X_test, y_train, y_test
 
 
-
 # implement the first test. Change the function name and input as needed
 def test_return_random_forest():
     """
@@ -79,7 +76,6 @@ def test_return_random_forest():
         model,
         RandomForestClassifier,
     ), "train_model should return a RandomForestClassifier."
-
 
 
 # implement the second test. Change the function name and input as needed
@@ -96,7 +92,6 @@ def test_inference_output_shape():
     assert (
         preds.shape[0] == n_samples
     ), "Number of predictions must match number of input samples."
-
 
 
 # implement the third test. Change the function name and input as needed
@@ -117,4 +112,3 @@ def test_models_in_valid_range():
         (fbeta, "fbeta"),
     ]:
         assert 0.0 <= metric <= 1.0, f"{name} should be between 0 and 1."
-

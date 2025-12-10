@@ -20,13 +20,12 @@ print(data_path)
 data = pd.read_csv(data_path)
 
 # split the provided data to have a train dataset and a test dataset
-# Optional enhancement, use K-fold cross validation instead of a train-test split.
 train, test = train_test_split(
-        data,
-        test_size=0.20,
-        random_state=42,
-        stratify=data["salary"],
-    )
+    data,
+    test_size=0.20,
+    random_state=42,
+    stratify=data["salary"],
+)
 
 # DO NOT MODIFY
 cat_features = [
@@ -42,11 +41,11 @@ cat_features = [
 
 # use the process_data function provided to process the data.
 X_train, y_train, encoder, lb = process_data(
-        train,
-        categorical_features=cat_features,
-        label="salary",
-        training=True,
-    )
+    train,
+    categorical_features=cat_features,
+    label="salary",
+    training=True,
+)
 
 X_test, y_test, _, _ = process_data(
     test,
@@ -67,37 +66,37 @@ encoder_path = os.path.join(project_path, "model", "encoder.pkl")
 save_model(encoder, encoder_path)
 
 # load the model
-model = load_model(
-    model_path
-) 
+model = load_model(model_path)
 
 # use the inference function to run the model inferences on the test dataset.
 preds = inference(model, X_test)
-
 
 # Calculate and print the metrics
 p, r, fb = compute_model_metrics(y_test, preds)
 print(f"Precision: {p:.4f} | Recall: {r:.4f} | F1: {fb:.4f}")
 
-
-# compute the performance on model slices using the performance_on_categorical_slice function
-# iterate through the categorical features
+# compute performance on data slices
 for col in cat_features:
     # iterate through the unique values in one categorical feature
     for slicevalue in sorted(test[col].unique()):
         count = test[test[col] == slicevalue].shape[0]
+
         p, r, fb = performance_on_categorical_slice(
             # your code here
             # use test, col and slicevalue as part of the input
-                data=test,
-                column_name=col,
-                slicevalue=slicevalue,
-                categorical_features=CAT_FEATURES,
-                label="salary",
-                encoder=encoder,
-                lb=lb,
-                model=model,
+            data=test,
+            column_name=col,
+            slicevalue=slicevalue,
+            categorical_features=cat_features,
+            label="salary",
+            encoder=encoder,
+            lb=lb,
+            model=model,
         )
+
         with open("slice_output.txt", "a") as f:
             print(f"{col}: {slicevalue}, Count: {count:,}", file=f)
-            print(f"Precision: {p:.4f} | Recall: {r:.4f} | F1: {fb:.4f}", file=f)
+            print(
+                f"Precision: {p:.4f} | Recall: {r:.4f} | F1: {fb:.4f}",
+                file=f,
+            )
